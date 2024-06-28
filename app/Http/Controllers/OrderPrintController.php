@@ -39,7 +39,7 @@ class OrderPrintController extends Controller
             $total = 0;
             foreach ($order->items as $item) {
                 $total += $item->price * $item->quantity;
-                $printer->text(sprintf("%-10s %2d    Rs. %s\n", $item->product->name, $item->quantity, $item->price));
+                $printer->text(sprintf("%-10s %2d    Rs. %s\n", $item->product->name, $item->quantity, number_format($item->price, 2, '.', '')));
             }
         
             // Print total
