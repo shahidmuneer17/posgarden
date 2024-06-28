@@ -1,0 +1,77 @@
+# Laravel & PHP related files
+/vendor/
+/node_modules/
+/public/storage
+/storage/*.key
+.env
+
+# Laravel specific files
+Homestead.yaml
+Homestead.json
+.env.backup
+.env.example
+
+# IDE and editor specific files
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Composer files
+composer.lock
+
+# npm files
+npm-debug.log
+yarn-error.log
+
+# Laravel Mix files
+/public/hot
+/public/mix-manifest.json
+/public/css/*.css
+/public/js/*.js
+/public/js/*.map
+/public/css/*.map
+
+# Logging and caching files
+/storage/logs/*.log
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+
+# Backup files
+*.bak
+*.backup
+
+# Ignored generated files
+/public/hot
+/public/storage
+/public/mix-manifest.json
+/storage/*.key
+
+# Ignored npm files
+npm-debug.log
+yarn-error.log
+.pnp
+.pnp.js
+.cache
+
+# Ignored compiled files
+*.pyc
+*.pyo
+__pycache__/
+*.class
+
+# Misc
+/.env.testing
+/phpunit.result.cache
+/.phpunit.result.cache
+/phpunit.xml
+/.phpunit.xml
+/.phpunit.watcher.xml
+/.phpunit.watcher.xml.dist
+/.phpunit.cache
+/.phpunit.cache.result

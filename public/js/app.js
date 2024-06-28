@@ -69733,7 +69733,20 @@ var Cart = /*#__PURE__*/function (_Component) {
         if (result.value) {
           //print order
           var order = result.value;
-          window.location.href = "/admin/print-order/".concat(order);
+    fetch("/admin/print-order/" + order)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.blob();
+      })
+      .then(blob => {
+        // Handle the response data
+        console.log('Request successful', blob);
+      })
+      .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+      });
         }
       });
     }
