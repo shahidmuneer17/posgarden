@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Order; // Assuming you have an Order model
 use PDF;
 use Mike42\Escpos\PrintConnectors\FilePrintConnector;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\Printer;
 use Illuminate\Support\Facades\Log;
 
@@ -17,15 +18,15 @@ class OrderPrintController extends Controller
         Log::info('Printing order: ' . $orderId);
         // Fetch the order and printer name from the database
         $order = Order::findOrFail($orderId);
-        $printerName = 'Black copper BC-85AC'; // Assuming the printer name is stored in the order
+        $printerName = 'Black Copper BC-85AC'; // Assuming the printer name is stored in the order
 
         try {
-            $connector = new \Mike42\Escpos\PrintConnectors\FilePrintConnector($printerName);
-            $printer = new \Mike42\Escpos\Printer($connector);
+            $connector = new WindowsPrintConnector($printerName);
+            $printer = new Printer($connector);
         
             // Set the paper width (80mm)
-            $printer->selectPrintMode(\Mike42\Escpos\Printer::MODE_FONT_B);
-            $printer->setJustification(\Mike42\Escpos\Printer::JUSTIFY_CENTER);
+            $printer->selectPrintMode(Printer::MODE_FONT_B);
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
         
             // Print a header
             $printer->text("Grocery Garden\n");
@@ -33,7 +34,7 @@ class OrderPrintController extends Controller
             $printer->text("--------------------\n");
         
             // Assuming $order->items is an array of items
-            $printer->setJustification(\Mike42\Escpos\Printer::JUSTIFY_LEFT);
+            $printer->setJustification(Printer::JUSTIFY_LEFT);
             $printer->text("Product    Qty    Price\n");
         
             $total = 0;
@@ -56,6 +57,8 @@ class OrderPrintController extends Controller
             Log::error("Error printing: " . $e->getMessage());
             return response()->json(['error' => 'Failed to print'], 500);
         }
+        
+        return response()->json(['success' => 'Print successful']);
 
         // View PDF Order
 
