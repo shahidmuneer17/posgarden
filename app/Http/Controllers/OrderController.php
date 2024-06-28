@@ -50,6 +50,6 @@ class OrderController extends Controller
             'amount' => $request->amount,
             'user_id' => $request->user()->id,
         ]);
-        return 'success';
+        return $order->id;
     }
 }

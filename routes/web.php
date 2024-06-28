@@ -31,4 +31,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::delete('/cart/empty', [CartController::class, 'empty']);
 
     Route::get('/printers', [OrderPrintController::class, 'showPrinterSettings'])->name('printers.index');
+
+    Route::get('/print-order/{orderId}', [OrderPrintController::class, 'printOrder'])->name('printOrder');
 });

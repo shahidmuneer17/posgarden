@@ -69730,22 +69730,10 @@ var Cart = /*#__PURE__*/function (_Component) {
           return !sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.isLoading();
         }
       }).then(function (result) {
-        if (result.value) {//
-          var receiptContent = "<div style='font-family: monospace;max-height: fit-content;'><h2>Grocery Garden</h2><p><strong>Tel: 0346-0323336</strong></p><p>--------------------------------</p><table><tr><td>Product</td><td>Qty</td><td>Price</td></tr>";
-    _this8.state.cart.forEach(function(item) {
-      receiptContent += `<tr><td>${item.name}</td><td>${item.pivot.quantity}</td><td>${window.APP.currency_symbol} ${item.price}</td></tr>`;
-    });
-    receiptContent += `<tr><td colspan="2">Total</td><td>${window.APP.currency_symbol} ${_this8.getTotal(_this8.state.cart)}</td></tr></table>`;
-    receiptContent += `<p>--------------------------------</p><p>Thank you for shopping with us</p>`;
-    receiptContent += "</div>";
-
-    // Open print dialog
-    var printWindow = window.open('', '_blank');
-    printWindow.document.write(receiptContent);
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
+        if (result.value) {
+          //print order
+          var order = result.value;
+          window.location.href = "/admin/print-order/".concat(order);
         }
       });
     }
