@@ -38,21 +38,15 @@ class OrderPrintController extends Controller
         $printer->setJustification(\Mike42\Escpos\Printer::JUSTIFY_LEFT);
         $printer->text(sprintf("%-12s %8s %12s\n", "Product", "Qty", "Price"));
 
-        $total = 0;
-        foreach ($order->items as $item) {
-            $itemPrice = floatval($item->price);
-            $itemQuantity = intval($item->quantity);
-        
-            // Calculate the total for each item and add it to the overall total
-            $total += $itemPrice;
-        
+
+        foreach ($order->items as $item) {        
             // Print each item line
-            $printer->text(sprintf("%-10s %2d    Rs. %s\n", $item->product->name, $itemQuantity, number_format($itemPrice, 2, '.', '')));
+            $printer->text(sprintf("%-10s %2d    Rs. %s\n", $item->product->name, $item->quantity, number_format($item->Price, 2, '.', '')));
         }
 
         // Print total
         $printer->text("--------------------\n");
-        $printer->text(sprintf("%-12s %8s %12.2f\n", "", "Total:", $total));
+        $printer->text(sprintf("%-12s %8s %12.2f\n", "", "Total:", $order->total));
 
         // Footer
         $printer->text("--------------------\n");
