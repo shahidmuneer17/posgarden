@@ -31,6 +31,7 @@ class OrderPrintController extends Controller
             // Print a header
         $printer->text("Grocery Garden\n");
         $printer->text("Tel: 0346-0323336\n");
+        $printer->text("Order Number: " . $order->id . "\n");
         $printer->text("--------------------\n");
 
         // Adjusted for table-like structure
