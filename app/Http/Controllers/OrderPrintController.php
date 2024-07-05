@@ -28,6 +28,8 @@ class OrderPrintController extends Controller
         $tempPdfPath = tempnam(sys_get_temp_dir(), 'order') . '.pdf';
         file_put_contents($tempPdfPath, $pdfContent);
 
+        Log::info('PDF saved to: ' . $tempPdfPath);
+
         try {
             // Convert PDF to image using Imagick
             $imagick = new Imagick();
