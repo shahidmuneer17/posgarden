@@ -41,7 +41,7 @@ class OrderPrintController extends Controller
 
         foreach ($order->items as $item) {        
             // Print each item line
-            $printer->text(sprintf("%-10s %2d    Rs. %s\n", $item->product->name, $item->quantity, number_format($item->Price, 2, '.', '')));
+            $printer->text(sprintf("%-10s %2d    Rs. %s\n", $item->product->name, $item->quantity, number_format($item->price, 2, '.', '')));
         }
 
         // Print total

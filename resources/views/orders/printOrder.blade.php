@@ -1,62 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Receipt</title>
+    <title>Order #{{ $order->id }}</title>
     <style>
         body {
-            font-family: 'Monospace', sans-serif;
-            max-width: 300px; /* Adjusted for thermal printer width */
-            margin: 0;
-            font-size: 12px; /* Smaller font size for thermal printer */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            width: 80mm;
         }
-        table {
+        .header, .footer {
+            text-align: center;
+        }
+        .order-details {
             width: 100%;
-            border-collapse: collapse;
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #000;
+            margin-bottom: 10px;
         }
-        table, th, td {
-            border: none; /* Removed borders for simplicity */
-        }
-        th, td {
-            padding: 2px; /* Reduced padding */
+        .order-details th, .order-details td {
             text-align: left;
+            padding: 5px;
         }
-        .total-row > td {
-            font-weight: bold;
+        .order-details th {
+            border-bottom: 1px solid #000;
+        }
+        .total {
+            border-top: 1px solid #000;
+            text-align: right;
+            padding-top: 5px;
         }
     </style>
 </head>
 <body>
-    <div>
-        <h3>Grocery Garden</h3> <!-- Smaller heading for space efficiency -->
-        <p><strong>Tel: 0346-0323336</strong></p>
-        <p>--------------------</p> <!-- Shorter line for narrow paper -->
-        <table>
+    <div class="header">
+        <h1>Grocery Garden</h1>
+        <p>Tel: 0346-0323336</p>
+        <p>Order Number: {{ $order->id }}</p>
+    </div>
+    <table class="order-details">
+        <thead>
             <tr>
-                <td>Product</td>
-                <td>Qty</td>
-                <td>Price</td>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Price</th>
             </tr>
-            @foreach($order->items as $item)
+        </thead>
+        <tbody>
+            @foreach ($order->items as $item)
                 <tr>
                     <td>{{ $item->product->name }}</td>
                     <td>{{ $item->quantity }}</td>
-                    <td>Rs. {{ $item->price }}</td>
+                    <td>{{ number_format($item->price, 2) }}</td>
                 </tr>
             @endforeach
-            <tr class="total-row">
-                <td colspan="2">Total</td>
-                @php
-                $total = 0;
-                foreach($order->items as $item) {
-                    $total += $item->price * $item->quantity; // Fixed calculation to multiply by quantity
-                }
-                @endphp
-                <td>Rs. {{ $total }}</td>
-            </tr>
-        </table>
-        <p>--------------------</p> <!-- Shorter line for narrow paper -->
+        </tbody>
+    </table>
+    <div class="total">
+        <p>Total: Rs. {{ number_format($order->total, 2) }}</p>
+    </div>
+    <div class="footer">
         <p>Thank you for shopping with us</p>
     </div>
 </body>
