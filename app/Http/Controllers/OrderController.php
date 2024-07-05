@@ -30,9 +30,16 @@ class OrderController extends Controller
 
     public function store(OrderStoreRequest $request)
     {
+        $total = 0;
+        $cart = $request->user()->cart()->get();
+        foreach ($cart as $item) {
+            $total += $item->price * $item->pivot->quantity;
+        }
+        
         $order = Order::create([
             'customer_id' => $request->customer_id,
             'user_id' => $request->user()->id,
+            'total' => $total,
         ]);
 
         $cart = $request->user()->cart()->get();

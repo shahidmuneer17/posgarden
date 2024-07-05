@@ -44,7 +44,7 @@ class OrderPrintController extends Controller
             $itemQuantity = intval($item->quantity);
         
             // Calculate the total for each item and add it to the overall total
-            $total += $itemPrice * $itemQuantity;
+            $total += $itemPrice;
         
             // Print each item line
             $printer->text(sprintf("%-10s %2d    Rs. %s\n", $item->product->name, $itemQuantity, number_format($itemPrice, 2, '.', '')));
