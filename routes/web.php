@@ -34,3 +34,5 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     Route::get('/print-order/{orderId}', [OrderPrintController::class, 'printOrder'])->name('printOrder');
 });
+
+Route::get('/phpinfo', [HomeController::class, 'checkinfo']);

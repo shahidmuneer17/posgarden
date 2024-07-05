@@ -48,4 +48,10 @@ class HomeController extends Controller
             'products_count' => $products_count
         ]);
     }
+
+    public function checkinfo()
+    {
+        return view('phpinfo');
+
+    }
 }
