@@ -9,6 +9,7 @@ use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\Printer;
 use Illuminate\Support\Facades\Log;
+use Imagick;
 
 class OrderPrintController extends Controller
 {
@@ -20,40 +21,34 @@ class OrderPrintController extends Controller
         $order = Order::findOrFail($orderId);
         $printerName = 'Black Copper BC-85AC'; // Assuming the printer name is stored in the order
 
+        $pdf = Pdf::loadView('orders.printOrder', compact('order'))->setPaper([0, 0, 226.77, 1000], 'portrait'); // 80mm in points (96 dpi)
+        $pdfContent = $pdf->output();
+
+        // Save the PDF to a temporary file
+        $tempFilePath = tempnam(sys_get_temp_dir(), 'order') . '.pdf';
+        file_put_contents($tempFilePath, $pdfContent);
+
         try {
             $connector = new WindowsPrintConnector($printerName);
             $printer = new Printer($connector);
         
-            // Set the paper width (80mm)
-            $printer->selectPrintMode(Printer::MODE_FONT_B);
-            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            // Convert the first page of the PDF to an image
+            $imagick = new Imagick();
+            $imagick->readImage($tempFilePath . '[0]'); // '[0]' to specify the first page
+            $imagick->setImageFormat('png');
+            $tempImageFilePath = tempnam(sys_get_temp_dir(), 'order') . '.png';
+            $imagick->writeImage($tempImageFilePath);
         
-            // Print a header
-        $printer->text("Grocery Garden\n");
-        $printer->text("Tel: 0346-0323336\n");
-        $printer->text("Order Number: " . $order->id . "\n");
-        $printer->text("--------------------\n");
-
-        // Adjusted for table-like structure
-        $printer->setJustification(\Mike42\Escpos\Printer::JUSTIFY_LEFT);
-        $printer->text(sprintf("%-12s %8s %12s\n", "Product", "Qty", "Price"));
-
-
-        foreach ($order->items as $item) {        
-            // Print each item line
-            $printer->text(sprintf("%-10s %2d    Rs. %s\n", $item->product->name, $item->quantity, number_format($item->price, 2, '.', '')));
-        }
-
-        // Print total
-        $printer->text("--------------------\n");
-        $printer->text(sprintf("%-12s %8s %12.2f\n", "", "Total:", $order->total));
-
-        // Footer
-        $printer->text("--------------------\n");
-        $printer->text("Thank you for shopping with us\n");
-
+            // Load the image as EscposImage
+            $escposImage = EscposImage::load($tempImageFilePath, false);
+        
+            // Print the image
+            $printer->graphics($escposImage);
             $printer->cut();
             $printer->close();
+        
+            // Cleanup: Delete the temporary image file
+            unlink($tempImageFilePath);
         } catch (\Exception $e) {
             Log::error("Error printing: " . $e->getMessage());
             return response()->json(['error' => 'Failed to print'], 500);
