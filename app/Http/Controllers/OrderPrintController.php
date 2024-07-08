@@ -10,59 +10,76 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\Printer;
 use Illuminate\Support\Facades\Log;
 use Imagick;
+use Mike42\Escpos\EscposImage;
 
 class OrderPrintController extends Controller
 {
     public function printOrder($orderId)
-    {
-        Log::info('Printing order: ' . $orderId);
+{
 
-        // Fetch the order from the database
-        $order = Order::findOrFail($orderId);
+    Log::info('Printing order: ' . $orderId);
 
-        // Generate PDF content using a Blade view
-        $pdf = PDF::loadView('orders.printOrder', compact('order'));
-        $pdfContent = $pdf->output();
+    // Fetch the order from the database
+    $order = Order::findOrFail($orderId);
 
-        // Save the PDF to a temporary file
-        $tempPdfPath = tempnam(sys_get_temp_dir(), 'order') . '.pdf';
-        file_put_contents($tempPdfPath, $pdfContent);
+// Generate PDF content using a Blade view
+$pdf = PDF::loadView('orders.printOrder', compact('order'));
+// $pdf->setPaper([0, 0, 80, 0], 'portrait'); // Set custom paper size: 80mm width, height to fit content
+$pdfContent = $pdf->output();
 
-        Log::info('PDF saved to: ' . $tempPdfPath);
+// Download PDF
+// return $pdf->download('order.pdf');
 
-        try {
-            // Convert PDF to image using Imagick
-            $imagick = new Imagick();
-            $imagick->setResolution(150, 150); // Set resolution to 150 DPI
-            $imagick->readImage($tempPdfPath . '[0]'); // Convert first page only
-            $imagick->setImageFormat('png');
+    // Save the PDF to a temporary file
+    $tempPdfPath = tempnam(sys_get_temp_dir(), 'order') . '.pdf';
+    file_put_contents($tempPdfPath, $pdfContent);
 
-            // Save the image to a temporary file
-            $tempImagePath = tempnam(sys_get_temp_dir(), 'order') . '.png';
-            $imagick->writeImage($tempImagePath);
-            $imagick->clear();
-            $imagick->destroy();
+    Log::info('PDF saved to: ' . $tempPdfPath);
 
-            Log::info('Image saved to: ' . $tempImagePath);
+    try {
+        // Convert PDF to image using Imagick
+        $imagick = new Imagick();
+        $imagick->setResolution(203, 203); // Set resolution to match thermal printer DPI
+        $imagick->readImage($tempPdfPath . '[0]'); // Convert first page only
+        $imagick->setImageFormat('png');
 
-            // Print the image using the thermal printer
-            $connector = new WindowsPrintConnector('Black Copper BC-85AC'); // Adjust this to your printer's network path or name
-            $printer = new Printer($connector);
-            $printer->graphics($tempImagePath);
-            $printer->cut();
-            $printer->close();
+        // Trim white spaces
+        $imagick->trimImage(0); // Remove white borders
+        $imagick->setImagePage(0, 0, 0, 0); // Reset the canvas
 
-            // // Clean up the temporary files
-            // unlink($tempPdfPath);
-            // unlink($tempImagePath);
+        // Save the image to a temporary file
+        $tempImagePath = tempnam(sys_get_temp_dir(), 'order') . '.png';
+        $imagick->writeImage($tempImagePath);
 
-        } catch (\Exception $e) {
-            Log::error("Error printing: " . $e->getMessage());
-            return response()->json(['error' => 'Failed to print'], 500);
-        }
+        $imagick->clear();
+        $imagick->destroy();
 
-        return response()->json(['success' => 'Print successful']);
+        Log::info('Image saved to: ' . $tempImagePath);
+
+        // Create an EscposImage object from the saved image file
+        $img = EscposImage::load($tempImagePath, false);
+
+        // Print the image using the thermal printer
+        $connector = new WindowsPrintConnector('Black Copper BC-85AC'); // Adjust this to your printer's network path or name
+        $printer = new Printer($connector);
+        $printer->bitImageColumnFormat($img);
+        $printer->cut();
+        $printer->close();
+
+
+        // Clean up the temporary files
+        // unlink($tempPdfPath);
+        // unlink($tempImagePath);
+
+    } catch (\Exception $e) {
+        Log::error("Error printing: " . $e->getMessage());
+        return response()->json(['error' => 'Failed to print'], 500);
     }
+
+    return response()->json(['success' => 'Print successful']);
+    // return response()->download($tempImagePath, 'download.png')->deleteFileAfterSend(true);
+}
+
 //     //
 //     public function printOrder($orderId)
 //     {

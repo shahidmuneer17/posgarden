@@ -5,44 +5,48 @@
     <style>
         body {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 12px;
-            width: 80mm;
+            font-size: 12px; /* Adjust font size for readability */
+            margin: 0;
+            font-weight: 600;
+            padding: 0;
+            max-width: 270px; /* Set the width of the document */
         }
         .header, .footer {
             text-align: center;
+            margin-bottom: 5px;
         }
         .order-details {
             width: 100%;
-            border-top: 1px solid #000;
-            border-bottom: 1px solid #000;
-            margin-bottom: 10px;
+            border-collapse: collapse;
+            margin-bottom: 5px;
         }
         .order-details th, .order-details td {
-            text-align: left;
-            padding: 5px;
+            border: 0px solid #000;
+            padding: 2px;
         }
         .order-details th {
-            border-bottom: 1px solid #000;
+            text-align: left;
+            background-color: #f2f2f2;
         }
         .total {
-            border-top: 1px solid #000;
             text-align: right;
-            padding-top: 5px;
+            margin-top: 5px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Grocery Garden</h1>
+        <h2>Grocery Garden</h2>
         <p>Tel: 0346-0323336</p>
         <p>Order Number: {{ $order->id }}</p>
     </div>
     <table class="order-details">
         <thead>
             <tr>
-                <th>Product</th>
-                <th>Qty</th>
-                <th>Price</th>
+                <th style="width: 60%;">Product</th> <!-- Adjust width for first column -->
+                <th style="width: 20%;">Qty</th>     <!-- Adjust width for second column -->
+                <th style="width: 20%;">Price</th>   <!-- Adjust width for third column -->
             </tr>
         </thead>
         <tbody>
@@ -50,7 +54,7 @@
                 <tr>
                     <td>{{ $item->product->name }}</td>
                     <td>{{ $item->quantity }}</td>
-                    <td>{{ number_format($item->price, 2) }}</td>
+                    <td>Rs. {{ number_format($item->price, 2) }}</td>
                 </tr>
             @endforeach
         </tbody>
