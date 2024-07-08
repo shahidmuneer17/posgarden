@@ -4,7 +4,7 @@
     <title>Order #{{ $order->id }}</title>
     <style>
         body {
-            font-family: 'Courier New', Courier, monospace;
+            font-family: Verdana, Geneva, sans-serif;
             font-size: 12px; /* Adjust font size for readability */
             margin: 0;
             font-weight: 600;
