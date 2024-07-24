@@ -4,7 +4,7 @@
 @section('content-header', 'Update Settings')
 
 @section('content')
-<div class="card"><!-- Log on to codeastro.com for more projects -->
+<div class="card">
     <div class="card-body">
         <form action="{{ route('settings.store') }}" method="post">
             @csrf
@@ -50,5 +50,5 @@
             <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-check"></i> Submit Changes</button>
         </form>
     </div>
-</div><!-- Log on to codeastro.com for more projects -->
+</div>
 @endsection

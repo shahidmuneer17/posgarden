@@ -171,28 +171,110 @@ class Cart extends Component {
     }
     handleClickSubmit() {
         Swal.fire({
-            title: 'Received Amount',
-            input: 'text',
-            inputValue: this.getTotal(this.state.cart),
+            title: 'Enter Discount and Received Amount',
+            html: `
+                <div class="row mb-3 border-bottom mt-3 text-left">
+                <div class="col-md-6">
+                <p class="m-0"><strong>Total Amount:</strong></p>
+                </div>
+                <div class="col-md-6">
+                <p class="m-0" style="font-size: 24px; font-weight: 800;"> ${this.getTotal(this.state.cart)}</p>
+                </div>
+                </div>
+                <div class="row mb-3 border-bottom mt-3 text-left">
+                <div class="col-md-6">
+                <p class="m-0">Discount</p>
+                </div>
+                <div class="col-md-6">
+                <input id="swal-input2" class="swal2-input" value="0.00" placeholder="Discount" type="number" step="0.01" name="discount">
+                </div>
+                </div>
+                <div class="row mb-3 border-bottom mt-3 text-left">
+                <div class="col-md-6">
+                <p class="m-0"><strong>Total Payable:</strong><p>
+                </div>
+                <div class="col-md-6">
+                <p class="m-0" id="total-payable" style="font-size: 24px; font-weight: 800;">${this.getTotal(this.state.cart)}</p>
+                </div>
+                </div>
+                <div class="row mb-3 border-bottom mt-3 text-left">
+                <div class="col-md-6">
+                <p class="m-0">Received Amount</p>
+                </div>
+                <div class="col-md-6">
+                <input id="swal-input3" class="swal2-input" value="${this.getTotal(this.state.cart)}" placeholder="Received Amount" type="number" step="0.01" name="amount">
+                </div>
+                </div>
+            `,
             showCancelButton: true,
             confirmButtonText: 'Send',
             showLoaderOnConfirm: true,
-            preConfirm: (amount) => {
-                return axios.post('/admin/orders', { customer_id: this.state.customer_id, amount }).then(res => {
+            preConfirm: () => {
+                const discount = parseFloat(document.getElementById('swal-input2').value) || 0;
+                const total = parseFloat(this.getTotal(this.state.cart)) || 0;
+                const amount = parseFloat(document.getElementById('swal-input3').value) || 0;
+                const totalPayable = total - discount;
+
+                if (discount > total) {
+                    Swal.showValidationMessage('Discount cannot be greater than total amount.');
+                    return false;
+                }
+    
+                if (totalPayable <= 0) {
+                    Swal.showValidationMessage('Total payable amount cannot be zero or negative.');
+                    return false;
+                }
+    
+                return axios.post('/admin/orders', {
+                    customer_id: this.state.customer_id,
+                    discount: discount,
+                    amount: amount
+                }).then(res => {
                     this.loadCart();
                     return res.data;
                 }).catch(err => {
-                    Swal.showValidationMessage(err.response.data.message)
-                })
+                    Swal.showValidationMessage(err.response.data.message);
+                });
             },
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
             if (result.value) {
-                //
+                var order = result.value;
+                fetch("/admin/print-order/" + order)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        // Handle the response data
+                        console.log('Request successful', blob);
+                    })
+                    .catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                    });
             }
-        })
-
+        });
+    
+        // Update total payable dynamically when discount changes
+        const discountInput = document.getElementById('swal-input2');
+        discountInput.addEventListener('input', () => {
+            const discount = parseFloat(discountInput.value) || 0;
+            const total = parseFloat(this.getTotal(this.state.cart)) || 0;
+            let totalPayable = total - discount;
+    
+            if (totalPayable < 0) {
+                totalPayable = 0;
+            }
+    
+            document.getElementById('total-payable').innerHTML = `${totalPayable.toFixed(2)}`;
+            document.getElementById('swal-input3').value = totalPayable.toFixed(2);
+        });
     }
+    
+    
+    
     render() {
         const { cart, products, customers, barcode } = this.state;
         return (

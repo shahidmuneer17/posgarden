@@ -6,7 +6,7 @@
              style="opacity: .8">
         <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
     </a>
-	<!-- Log on to codeastro.com for more projects -->
+	
 
     <!-- Sidebar -->
     <div class="sidebar">
@@ -71,6 +71,6 @@
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
-    </div><!-- Log on to codeastro.com for more projects -->
+    </div>
     <!-- /.sidebar -->
 </aside>

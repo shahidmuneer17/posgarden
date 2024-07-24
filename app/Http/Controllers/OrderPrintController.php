@@ -22,8 +22,10 @@ class OrderPrintController extends Controller
     // Fetch the order from the database
     $order = Order::findOrFail($orderId);
 
+    $orderPayment = $order->payments()->first();
+
 // Generate PDF content using a Blade view
-$pdf = PDF::loadView('orders.printOrder', compact('order'));
+$pdf = PDF::loadView('orders.printOrder', compact('order', 'orderPayment'));
 // $pdf->setPaper([0, 0, 80, 0], 'portrait'); // Set custom paper size: 80mm width, height to fit content
 $pdfContent = $pdf->output();
 

@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-<div class="card"><!-- Log on to codeastro.com for more projects -->
+<div class="card">
     <div class="card-body">
         <div class="row">
             <!-- <div class="col-md-3"></div> -->
@@ -63,7 +63,7 @@
                 </tr>
                 @endforeach
             </tbody>
-            <tfoot><!-- Log on to codeastro.com for more projects -->
+            <tfoot>
                 <tr>
                     <th></th>
                     <th></th>
@@ -77,6 +77,6 @@
         </table>
         {{ $orders->render() }}
     </div>
-</div><!-- Log on to codeastro.com for more projects -->
+</div>
 @endsection
 

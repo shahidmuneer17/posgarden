@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-	<!-- Log on to codeastro.com for more projects -->
+	
     
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
@@ -44,7 +44,7 @@
                         </div><!-- /.col -->
                     </div>
                 </div><!-- /.container-fluid -->
-            </section><!-- Log on to codeastro.com for more projects -->
+            </section>
 
             <!-- Main content -->
             <section class="content">
@@ -63,7 +63,7 @@
             <!-- Control sidebar content goes here -->
         </aside>
         <!-- /.control-sidebar -->
-    </div><!-- Log on to codeastro.com for more projects -->
+    </div>
     <!-- ./wrapper -->
 
     <script src="{{ asset('js/app.js') }}"></script>

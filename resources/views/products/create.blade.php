@@ -7,7 +7,7 @@
 
 <div class="card">
     <div class="card-body">
-	<!-- Log on to codeastro.com for more projects -->
+	
         <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
@@ -59,10 +59,10 @@
             </div>
 
             <div class="form-group">
-                <label for="price">Price</label>
-                <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" id="price"
-                    placeholder="Enter price" value="{{ old('price') }}">
-                @error('price')
+                <label for="pur_price">Purchase Price</label>
+                <input type="number" name="pur_price" class="form-control @error('pur_price') is-invalid @enderror" id="pur_price"
+                    placeholder="Enter purchase price" value="{{ old('pur_price') }}">
+                @error('pur_price')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -70,10 +70,10 @@
             </div>
 
             <div class="form-group">
-                <label for="pur_price">Purchase Price</label>
-                <input type="number" name="pur_price" class="form-control @error('pur_price') is-invalid @enderror" id="pur_price"
-                    placeholder="Enter purchase price" value="{{ old('pur_price') }}">
-                @error('pur_price')
+                <label for="price">Sale Price</label>
+                <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" id="price"
+                    placeholder="Enter price" value="{{ old('price') }}">
+                @error('price')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -105,7 +105,7 @@
             </div>
 
             <button class="btn btn-success btn-block btn-lg" type="submit">Submit</button>
-        </form><!-- Log on to codeastro.com for more projects -->
+        </form>
     </div>
 </div>
 @endsection

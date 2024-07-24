@@ -11,7 +11,7 @@
 
 @section('content')
 <p class="login-box-msg">Log in to start your session</p>
-<!-- Log on to codeastro.com for more projects -->
+
 <form action="{{ route('login') }}" method="post">
     @csrf
     <div class="form-group">
@@ -64,7 +64,7 @@
         <!-- /.col -->
     </div>
 </form>
-<!-- Log on to codeastro.com for more projects -->
+
 <p class="mb-1">
     <a href="{{ route('password.request') }}">I forgot my password</a>
 </p>

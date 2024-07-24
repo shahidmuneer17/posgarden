@@ -54,14 +54,38 @@
                 <tr>
                     <td>{{ $item->product->name }}</td>
                     <td>{{ $item->quantity }}</td>
-                    <td>Rs. {{ number_format($item->price, 2) }}</td>
+                    <td>{{ number_format($item->price, 2) }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
     <div class="total">
-        <p>Total: Rs. {{ number_format($order->total, 2) }}</p>
+        <p>Total: {{ number_format($order->total, 2) }}</p>
     </div>
+    @if($order->discount > 0)
+    <div class="total">
+        <p>Discount: {{ number_format($order->discount, 2) }}</p>
+    </div>
+    @php
+    $net_total = $order->total - $order->discount;
+    @endphp
+    <div class="total">
+        <p>Net Total: {{ number_format($net_total, 2) }}</p>
+    </div>
+    @endif
+    <div class="total">
+        <p>Payment: {{ number_format($orderPayment->amount, 2) }}</p>
+    </div>
+    @php
+    $net1_total = $order->total - $order->discount;
+    $balance = $net1_total - $orderPayment->amount;
+    @endphp
+    @if($balance > 0)
+    <div class="total">
+        <p>Balance: {{ number_format($net1_total - $orderPayment->amount, 2) }}</p>
+    </div>
+    @endif
+
     <div class="footer">
         <p>Thank you for shopping with us</p>
     </div>

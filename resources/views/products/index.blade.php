@@ -11,9 +11,9 @@
 @section('content')
 <div class="card product-list">
     <div class="card-body">
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover" id="example">
             <thead class="thead-dark">
-                <tr><!-- Log on to codeastro.com for more projects -->
+                <tr>
                     <th>ID</th>
                     <th>Name</th>
                     <th>Image</th>
@@ -53,7 +53,7 @@
         </table>
         {{ $products->render() }}
     </div>
-</div><!-- Log on to codeastro.com for more projects -->
+</div>
 @endsection
 
 @section('js')
@@ -90,4 +90,14 @@
         })
     })
 </script>
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.0/css/dataTables.dataTables.min.css">
+    <!-- DataTables JS -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/2.1.0/js/dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
+        });
+    </script>
 @endsection

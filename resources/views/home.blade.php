@@ -5,7 +5,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="row">
-		<!-- Log on to codeastro.com for more projects -->
+		
           <div class="col-lg-4 col-6">
             <!-- small box -->
             <div class="small-box bg-purple">
@@ -51,7 +51,7 @@
           
     </div>
 
-    <div class="row"><!-- Log on to codeastro.com for more projects -->
+    <div class="row">
     <div class="col-lg-4 col-6">
             <!-- small box -->
             <div class="small-box bg-teal">
@@ -84,5 +84,5 @@
       </div>
       <!-- ./col -->
     </div>
-</div><!-- Log on to codeastro.com for more projects -->
+</div>
 @endsection

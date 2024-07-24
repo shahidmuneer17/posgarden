@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderStoreRequest;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -39,13 +40,16 @@ class OrderController extends Controller
         $order = Order::create([
             'customer_id' => $request->customer_id,
             'user_id' => $request->user()->id,
+            'discount' => $request->discount ?? 0,
             'total' => $total,
         ]);
 
         $cart = $request->user()->cart()->get();
         foreach ($cart as $item) {
+            $prod = Product::find($item->id);
             $order->items()->create([
                 'price' => $item->price * $item->pivot->quantity,
+                'pur_price' => $prod->pur_price * $item->pivot->quantity,
                 'quantity' => $item->pivot->quantity,
                 'product_id' => $item->id,
             ]);
