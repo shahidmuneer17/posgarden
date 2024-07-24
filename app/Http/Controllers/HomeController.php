@@ -44,6 +44,18 @@ class HomeController extends Controller
                 }
                 return $i->receivedAmount();
             })->sum(),
+            'profit' => $orders->map(function($i) {
+                return $i->profit();
+            })->sum(),
+            'profit_today' => $orders->where('created_at', '>=', date('Y-m-d').' 00:00:00')->map(function($i) {
+                return $i->profit();
+            })->sum(),
+            'discount' => $orders->map(function($i) {
+                return $i->discount;
+            })->sum(),
+            'discount_today' => $orders->where('created_at', '>=', date('Y-m-d').' 00:00:00')->map(function($i) {
+                return $i->discount;
+            })->sum(),
             'customers_count' => $customers_count,
             'products_count' => $products_count
         ]);

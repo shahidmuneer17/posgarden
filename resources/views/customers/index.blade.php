@@ -20,6 +20,10 @@
                     <th>Email</th>
                     <th>Contact</th>
                     <th>Address</th>
+                    <th>Total Sales</th>
+                    <th>Total Payments</th>
+                    <th>Total Discounts</th>
+                    <th>Balance Pending</th>
                     <th>Created At</th>
                     <th>Actions</th>
                 </tr>
@@ -35,6 +39,10 @@
                         <td>{{$customer->email}}</td>
                         <td>{{$customer->phone}}</td>
                         <td>{{$customer->address}}</td>
+                        <td>{{$customer->totalSales()}}</td>
+                        <td>{{$customer->totalPayments()}}</td>
+                        <td>{{$customer->totalDiscounts()}}</td>
+                        <td>{{$customer->balancePayments()}}</td>
                         <td>{{$customer->created_at}}</td>
                         <td>
                             <a href="{{ route('customers.edit', $customer) }}" class="btn btn-primary"><i

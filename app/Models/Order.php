@@ -59,4 +59,24 @@ class Order extends Model
     {
         return number_format($this->receivedAmount(), 2);
     }
+
+    public function profit()
+    {
+        
+        $purchasePrice = $this->items->map(function ($i){
+            if ($i->pur_price) {
+                return $i->pur_price;
+            } else {
+                return $i->product->pur_price;
+            }
+        })->sum();
+
+        $salePrice = $this->items->map(function ($i){
+            return $i->price;
+        })->sum();
+
+        $discount = $this->discount;
+
+        return $salePrice - $purchasePrice - $discount;
+    }
 }

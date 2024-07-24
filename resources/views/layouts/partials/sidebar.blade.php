@@ -54,6 +54,12 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
+                    <a href="{{ route('reports.index') }}" class="nav-link {{ activeSegment('reports') }}">
+                        <i class="nav-icon fas fa-chart-line"></i>
+                        <p>Reports</p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview">
                     <a href="{{ route('settings.index') }}" class="nav-link {{ activeSegment('settings') }}">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>Settings</p>
