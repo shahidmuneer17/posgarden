@@ -63,4 +63,19 @@ class OrderController extends Controller
         ]);
         return $order->id;
     }
+
+    public function tempUpdateOrderItemPurPrice()
+    {
+        $orders = Order::with('items.product')->get();
+        foreach ($orders as $order) {
+            foreach ($order->items as $item) {
+                if ($item->pur_price) {
+                    continue;
+                }
+                $item->pur_price = $item->product->pur_price;
+                $item->save();
+            }
+        }
+        return 'done';
+    }
 }

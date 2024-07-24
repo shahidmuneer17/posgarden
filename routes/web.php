@@ -35,6 +35,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/printers', [OrderPrintController::class, 'showPrinterSettings'])->name('printers.index');
 
     Route::get('/print-order/{orderId}', [OrderPrintController::class, 'printOrder'])->name('printOrder');
+
+    Route::get('/tempUpdate', [OrderController::class, 'tempUpdateOrderItemPurPrice'])->name('tempUpdateOrderItemPurPrice');
 });
 
 Route::get('/phpinfo', [HomeController::class, 'checkinfo']);
